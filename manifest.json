@@ -1,0 +1,25 @@
+{
+  "name": "Mindscape: Mental Health Simulator",
+  "short_name": "Mindscape",
+  "description": "An interactive narrative simulator diving deep into Depression, Bipolar, ADHD, and Anxiety.",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#0a0b10",
+  "theme_color": "#0a0b10",
+  "orientation": "portrait-primary",
+  "categories": ["games", "education"],
+  "icons": [
+    {
+      "src": "/icons/icon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any"
+    },
+    {
+      "src": "/icons/icon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "maskable"
+    }
+  ]
+}

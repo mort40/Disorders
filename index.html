@@ -1,0 +1,520 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/svg+xml" href="/icons/icon.svg" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" />
+    
+    <!-- PWA Settings -->
+    <meta name="theme-color" content="#0a0b10" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+    <link rel="apple-touch-icon" href="/icons/icon.svg" />
+    <link rel="manifest" href="/manifest.json" />
+
+    <title>Mindscape: Mental Health Simulator</title>
+    <script type="module" crossorigin src="/assets/index-Be033aAY.js"></script>
+    <link rel="stylesheet" crossorigin href="/assets/index-CBEXIVQb.css">
+  </head>
+  <body>
+    
+    <!-- Outer Viewport Container (Locks size to look native/portable) -->
+    <div id="app-container">
+      
+      <!-- Anxiety Vignette Overlay (Tunnel vision visual effect) -->
+      <div id="anxiety-vignette" class="anxiety-vignette"></div>
+
+      <!-- ========================================================
+           SCREEN 1: SPLASH SCREEN (Main Menu)
+           ======================================================== -->
+      <div id="splash-screen" class="screen active">
+        <!-- Language Switcher Top Bar -->
+        <div id="lang-selector-splash" style="display:flex; gap:10px; margin-bottom: 20px; z-index: 20;">
+          <button id="btn-lang-en-splash" class="btn" style="padding: 6px 12px; font-size: 0.8rem; background: rgba(255,255,255,0.08);">English</button>
+          <button id="btn-lang-ar-splash" class="btn" style="padding: 6px 12px; font-size: 0.8rem; background: rgba(255,255,255,0.08);">عربي</button>
+        </div>
+
+        <div class="logo-container">
+          <h1 id="splash-title" class="logo-title">MINDSCAPE</h1>
+          <p id="splash-subtitle" class="logo-subtitle">Navigating the Mind</p>
+        </div>
+
+        <div class="menu-buttons">
+          <button id="btn-start-diagnosed" class="btn btn-primary" aria-label="Start Diagnosed Journey">
+            <span id="txt-start-diagnosed">🔬 Diagnosed Journey</span>
+          </button>
+          <button id="btn-start-undiagnosed" class="btn" style="border-color: rgba(255,255,255,0.15);" aria-label="Start Undiagnosed Journey">
+            <span id="txt-start-undiagnosed">🎲 Undiagnosed Journey</span>
+          </button>
+          <button id="btn-start-survival" class="btn" style="border-color: rgba(255,255,255,0.15);" aria-label="Start Survival Mode">
+            <span id="txt-start-survival">🔥 Survival Mode</span>
+          </button>
+          <button id="btn-start-sandbox" class="btn" style="border-color: rgba(255,255,255,0.15);" aria-label="Start Custom Sandbox Mode">
+            <span id="txt-start-sandbox">🎨 Custom Sandbox Mode</span>
+          </button>
+          <button id="btn-continue" class="btn hidden" aria-label="Resume Journey">
+            <span id="txt-resume-journey">💾 Resume Journey</span>
+          </button>
+          <button id="btn-install" class="btn hidden" aria-label="Install App">
+            <span id="txt-install-app">📲 Install App</span>
+          </button>
+          <button id="btn-splash-tutorial" class="btn" aria-label="How to Play">
+            <span id="txt-guide-tutorial">📖 Guide & Tutorial</span>
+          </button>
+        </div>
+      </div>
+
+      <!-- ========================================================
+           SCREEN 2: GAMEPLAY SCREEN
+           ======================================================== -->
+      <div id="game-screen" class="screen">
+        
+        <!-- Game HUD: Top Bar Status Info -->
+        <header class="game-header">
+          <div class="time-container">
+            <span id="game-day" class="day-badge">Day 1</span>
+            <span id="game-period" class="time-badge">Morning</span>
+          </div>
+          <!-- Token Indicator (New) -->
+          <div id="currency-container" class="currency-container" title="Mind Tokens">
+            <span class="currency-icon">
+              <svg viewBox="0 0 24 24" style="width: 16px; height: 16px; fill: #ffd700; display: inline-block; vertical-align: middle;"><circle cx="12" cy="12" r="10" stroke="#b7791f" stroke-width="1.5" /><circle cx="12" cy="12" r="6" stroke="#b7791f" stroke-width="1" fill="none" /><path d="M12 9v6M10.5 10.5h3M10.5 13.5h3" stroke="#b7791f" stroke-width="1" stroke-linecap="round" /></svg>
+            </span>
+            <span id="game-tokens" class="currency-value">50</span>
+          </div>
+          <div id="disorder-label" class="manic-alert hidden">Mania Active</div>
+          <div class="header-icons">
+            <button id="btn-phone" class="icon-btn" aria-label="Open Phone" style="position: relative;">
+              <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:block;"><rect x="5" y="2" width="14" height="20" rx="2" ry="2"></rect><line x1="12" y1="18" x2="12.01" y2="18"></line></svg>
+              <span id="phone-badge" class="phone-badge hidden">0</span>
+            </button>
+            <button id="btn-shop" class="icon-btn" aria-label="Open Shop">
+              <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:block;"><circle cx="9" cy="21" r="1"></circle><circle cx="20" cy="21" r="1"></circle><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"></path></svg>
+            </button>
+            <button id="btn-sound" class="icon-btn sound-toggle" aria-label="Toggle Sound"></button>
+            <button id="btn-tutorial" class="icon-btn" aria-label="Help Tutorial">
+              <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:block;"><circle cx="12" cy="12" r="10"></circle><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"></path><line x1="12" y1="17" x2="12.01" y2="17"></line></svg>
+            </button>
+            <button id="btn-settings" class="icon-btn" aria-label="Settings Cog">
+              <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:block;"><circle cx="12" cy="12" r="3"></circle><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"></path></svg>
+            </button>
+          </div>
+        </header>
+
+        <!-- Stats Grid HUD Dashboard -->
+        <section class="hud-stats">
+          <!-- Energy -->
+          <div class="stat-item" data-stat="energy" title="Energy">
+            <span class="stat-icon">📊</span>
+            <div class="stat-track">
+              <div id="bar-energy" class="stat-fill"></div>
+            </div>
+            <span id="val-energy" class="stat-val">80%</span>
+          </div>
+          <!-- Focus -->
+          <div class="stat-item" data-stat="focus" title="Focus">
+            <span class="stat-icon">🧠</span>
+            <div class="stat-track">
+              <div id="bar-focus" class="stat-fill"></div>
+            </div>
+            <span id="val-focus" class="stat-val">70%</span>
+          </div>
+          <!-- Mood -->
+          <div class="stat-item" data-stat="mood" title="Mood">
+            <span class="stat-icon">🎭</span>
+            <div class="stat-track">
+              <div id="bar-mood" class="stat-fill"></div>
+            </div>
+            <span id="val-mood" class="stat-val">60%</span>
+          </div>
+          <!-- Stress -->
+          <div class="stat-item" data-stat="stress" title="Stress">
+            <span class="stat-icon">💓</span>
+            <div class="stat-track">
+              <div id="bar-stress" class="stat-fill"></div>
+            </div>
+            <span id="val-stress" class="stat-val">20%</span>
+          </div>
+          <!-- Social -->
+          <div class="stat-item" data-stat="social" title="Social">
+            <span class="stat-icon">👥</span>
+            <div class="stat-track">
+              <div id="bar-social" class="stat-fill"></div>
+            </div>
+            <span id="val-social" class="stat-val">50%</span>
+          </div>
+        </section>
+
+        <!-- Core Game Body: Scrollable Log and Choice Card Triggers -->
+        <main class="game-body">
+          <div id="narrative-log" class="narrative-log">
+            <!-- Narrative segments inserted programmatically here -->
+          </div>
+
+          <!-- ADHD Focus Slider Mini-Game Container (Appears when focus trigger needed) -->
+          <div id="adhd-minigame" class="adhd-minigame-container hidden">
+            <p id="adhd-title" style="font-size: 0.85rem; font-weight: 700; text-transform: uppercase; color: hsl(var(--adhd-accent));">
+              🌀 ADHD Focus Alignment
+            </p>
+            <p id="adhd-desc" style="font-size: 0.8rem; color: hsl(var(--text-muted));">
+              Tap the screen when the sliding white cursor is inside the green target zone!
+            </p>
+            <div class="slider-track-container">
+              <div class="target-zone"></div>
+              <div id="adhd-slider-cursor" class="focus-indicator"></div>
+            </div>
+            <button id="btn-adhd-lock" class="btn btn-primary" style="padding: 10px; font-size: 0.9rem;">
+              Align Focus
+            </button>
+          </div>
+
+          <!-- OCD Symmetry Alignment Mini-Game (New) -->
+          <div id="ocd-minigame" class="adhd-minigame-container hidden" style="border-color: hsl(var(--mania-border));">
+            <p id="ocd-title" style="font-size: 0.85rem; font-weight: 700; text-transform: uppercase; color: hsl(var(--mania-accent));">
+              🔒 OCD Symmetry Verification
+            </p>
+            <p id="ocd-desc" style="font-size: 0.8rem; color: hsl(var(--text-muted));">
+              Align all switches symmetrically! Match the left switches to the right.
+            </p>
+            <div id="ocd-switches-grid" style="display:flex; justify-content:center; gap:20px; margin: 15px 0;">
+              <!-- Swtiches spawned dynamically -->
+            </div>
+            <button id="btn-ocd-lock" class="btn btn-primary" style="padding: 10px; font-size: 0.9rem; background: linear-gradient(135deg, hsl(var(--mania-border)), #200050);">
+              Confirm Balance
+            </button>
+          </div>
+
+          <!-- Insomnia Mind Quieting Mini-Game (New) -->
+          <div id="insomnia-minigame" class="adhd-minigame-container hidden" style="border-color: hsl(var(--stat-social));">
+            <p id="insomnia-title" style="font-size: 0.85rem; font-weight: 700; text-transform: uppercase; color: hsl(var(--stat-social));">
+              💤 Insomnia Mind Quieting
+            </p>
+            <p id="insomnia-desc" style="font-size: 0.8rem; color: hsl(var(--text-muted));">
+              Tap the drifting thoughts when they align perfectly with the calm zone!
+            </p>
+            <div class="slider-track-container" style="height: 50px;">
+              <div class="target-zone" style="left: 42%; width: 16%; background: rgba(159, 122, 234, 0.4); border-color: hsl(var(--stat-social));"></div>
+              <div id="insomnia-thought-cursor" class="focus-indicator" style="background: hsl(var(--stat-social)); box-shadow: 0 0 10px hsl(var(--stat-social));"></div>
+            </div>
+            <p id="insomnia-counter" style="font-size: 0.75rem; text-align:center;">Quiet thoughts: 0 / 4</p>
+            <button id="btn-insomnia-lock" class="btn btn-primary" style="padding: 10px; font-size: 0.9rem; background: linear-gradient(135deg, hsl(var(--stat-social)), #100030);">
+              Quiet Mind
+            </button>
+          </div>
+
+          <!-- Distractions spawn container (Popups overlayed during ADHD day) -->
+          <div id="distractions-overlay-container" class="hidden" style="position: absolute; width: 100%; height: 100%; top: 0; left: 0; pointer-events: none; z-index: 60;"></div>
+
+          <div id="choices-panel" class="choices-panel">
+            <!-- Choice buttons inserted programmatically here -->
+          </div>
+        </main>
+      </div>
+
+      <!-- ========================================================
+           SCREEN 3: PANIC ATTACK INTERACTIVE COPING OVERLAY (Anxiety)
+           ======================================================== -->
+      <div id="panic-overlay" class="panic-overlay">
+        
+        <!-- View A: Panic Selection Menu (Strategy choosing) -->
+        <div id="panic-selection-menu" style="display:flex; flex-direction:column; gap:20px; align-items:center;">
+          <h2 id="panic-title" style="color: #f56565; font-family: var(--font-serif); font-size: 1.8rem; font-weight: 700;">
+            ⚠️ PANIC ATTACK
+          </h2>
+          <p id="panic-subtitle" style="font-size: 0.9rem; color: hsl(var(--text-muted)); max-width: 280px; margin-bottom:10px;">
+            Your heart is racing. The world is spinning. Choose a coping strategy to stabilize your nervous system.
+          </p>
+          <div style="display:flex; flex-direction:column; gap:12px; width:260px;">
+            <button id="btn-strategy-breathing" class="btn" style="border-color:hsl(var(--stat-focus)); text-align:center;">
+              🧘 Box Breathing / تنفس الصندوق
+            </button>
+            <button id="btn-strategy-popping" class="btn" style="border-color:hsl(var(--adhd-accent-2)); text-align:center;">
+              🎈 Pop Negative Thoughts / فرقع الأفكار
+            </button>
+            <button id="btn-strategy-grounding" class="btn" style="border-color:hsl(var(--stat-energy)); text-align:center;">
+              🔍 Grounding 5-4-3-2-1 / تمرين التركيز
+            </button>
+          </div>
+        </div>
+
+        <!-- View B: Interactive Games Container -->
+        <div id="panic-game-view" class="hidden" style="display:flex; flex-direction:column; align-items:center; gap:20px; width:100%; height:100%;">
+          
+          <!-- View B1: Box Breathing Game -->
+          <div id="panic-breathing-view" class="hidden" style="display:flex; flex-direction:column; align-items:center; gap:25px;">
+            <div class="breathing-circle-container">
+              <div class="breathing-ring"></div>
+              <div id="breathing-circle" class="breathing-circle"></div>
+            </div>
+            <div id="breathing-state-text" class="breathing-text">Inhale</div>
+            <p id="breathing-counter-text" style="font-size: 0.8rem; font-weight: 700; color: hsl(var(--stat-stress));">
+              Cycle: 0 / 2 completed
+            </p>
+          </div>
+
+          <!-- View B2: Pop Negative Thoughts Game -->
+          <div id="panic-popping-view" class="hidden" style="position:relative; width:100%; height:320px; border:1px dashed rgba(255,255,255,0.1); border-radius:16px; overflow:hidden;">
+            <p id="popping-instructions" style="position:absolute; width:100%; text-align:center; top:12px; font-size:0.75rem; color:hsl(var(--text-muted)); pointer-events:none;">
+              Tap the floating bubbles to pop them before they escape!
+            </p>
+            <p id="popping-counter-text" style="position:absolute; width:100%; text-align:center; bottom:12px; font-size:0.8rem; font-weight:700; color:hsl(var(--stat-stress)); pointer-events:none;">
+              Thoughts Popped: 0 / 8
+            </p>
+          </div>
+
+          <!-- View B3: Grounding shapes Game -->
+          <div id="panic-grounding-view" class="hidden" style="display:flex; flex-direction:column; align-items:center; gap:16px; width:100%;">
+            <p id="grounding-prompt-text" style="font-size:0.95rem; font-weight:700; color:#fff; min-height:45px; text-align:center; max-width:280px;">
+              Tap the Yellow Triangle!
+            </p>
+            <div id="grounding-shapes-grid" style="display:flex; justify-content:center; gap:20px; align-items:center; min-height:100px;">
+              <!-- 3 shapes dynamically injected -->
+            </div>
+            <p id="grounding-counter-text" style="font-size:0.8rem; font-weight:700; color:hsl(var(--stat-energy));">
+              Shapes Found: 0 / 4
+            </p>
+          </div>
+
+          <!-- Cancel/Switch Strategy Button -->
+          <button id="btn-panic-change-strategy" class="btn" style="margin-top:auto; padding:8px 16px; font-size:0.8rem; border-color:rgba(255,255,255,0.15);">
+            ↩️ Change Coping Strategy
+          </button>
+        </div>
+      </div>
+
+      <!-- ========================================================
+           SCREEN 4: DIAGNOSTIC ASSESSMENT MODAL (New)
+           ======================================================== -->
+      <div id="assessment-modal" class="modal-overlay">
+        <div class="modal-content glass" style="max-width: 400px; text-align:center; gap: 24px; padding: 32px;">
+          <header class="modal-header">
+            <h2 id="assess-title" class="modal-title" style="color: hsl(var(--accent)); width: 100%;">Psychological Profiler</h2>
+            <button id="btn-close-assessment" class="modal-close" style="display:none;">&times;</button>
+          </header>
+          
+          <!-- Assessment Body -->
+          <div id="assessment-quiz-body" style="display:flex; flex-direction:column; gap:16px;">
+            <p id="assess-q-tracker" style="font-size: 0.8rem; font-weight: 700; text-transform: uppercase; color: hsl(var(--text-muted));">
+              Question 1 of 20
+            </p>
+            <p id="assess-q-text" style="font-size: 1.1rem; line-height: 1.5; min-height: 80px; font-family: var(--font-serif); font-weight: 700;">
+              I often feel like my energy is completely gone even after a full night of sleep.
+            </p>
+            <div id="assess-options-container" style="display:flex; flex-direction:column; gap:10px;">
+              <button class="btn btn-assess-opt" data-weight="3">Strongly Agree / أوافق بشدة</button>
+              <button class="btn btn-assess-opt" data-weight="2">Agree / أوافق</button>
+              <button class="btn btn-assess-opt" data-weight="1">Disagree / لا أوافق</button>
+              <button class="btn btn-assess-opt" data-weight="0">Strongly Disagree / أرفض بشدة</button>
+            </div>
+          </div>
+
+          <!-- Assessment Result Splash -->
+          <div id="assessment-result-body" class="hidden" style="display:flex; flex-direction:column; gap:20px; align-items:center;">
+            <div class="logo-container" style="margin: 10px 0;">
+              <span style="font-size: 3rem;">🔬</span>
+            </div>
+            <h3 id="assess-res-title" style="font-family: var(--font-serif); font-size: 1.4rem;">Diagnosis Formed</h3>
+            <p id="assess-res-desc" style="font-size: 0.9rem; color: hsl(var(--text-muted)); line-height: 1.5; max-width: 300px;">
+              Your story schedule has been custom tailored to align with your highest score states.
+            </p>
+            <div id="assess-res-tags" style="display:flex; flex-wrap:wrap; gap:8px; justify-content:center;">
+              <!-- Score badges spawned dynamically -->
+            </div>
+            <button id="btn-assess-proceed" class="btn btn-primary" style="width: 100%; margin-top: 10px;">
+              Begin Tailored Week / ابدأ الأسبوع المخصص
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- ========================================================
+           MODALS: Settings & Tutorial
+           ======================================================== -->
+      
+      <!-- 1. Settings Dialog -->
+      <div id="settings-modal" class="modal-overlay">
+        <div class="modal-content glass">
+          <header class="modal-header">
+            <h2 id="settings-title" class="modal-title">Settings</h2>
+            <button id="btn-close-settings" class="modal-close" aria-label="Close Settings">&times;</button>
+          </header>
+
+          <div class="setting-section">
+            <!-- Language toggle row -->
+            <div class="setting-row">
+              <span id="settings-lang-label">Language / اللغة</span>
+              <div style="display:flex; gap:6px;">
+                <button id="btn-lang-en" class="btn" style="padding: 4px 10px; font-size: 0.75rem;">EN</button>
+                <button id="btn-lang-ar" class="btn" style="padding: 4px 10px; font-size: 0.75rem;">عربي</button>
+              </div>
+            </div>
+
+            <div class="setting-row">
+              <span id="settings-sound-label">Game Sound Effects</span>
+              <label class="switch">
+                <input type="checkbox" id="switch-sound" checked />
+                <span class="slider"></span>
+              </label>
+            </div>
+            
+            <div class="setting-row" style="flex-direction: column; align-items: stretch; gap: 8px;">
+              <span id="settings-backup-label" class="setting-label">Backup & Progress</span>
+              <button id="btn-export-save" class="btn" style="padding: 10px; font-size: 0.9rem;">
+                📥 Export Save File
+              </button>
+              
+              <div class="import-btn-wrapper">
+                <button class="btn" style="padding: 10px; font-size: 0.9rem; width: 100%;">
+                  📤 Import Save File
+                </button>
+                <input type="file" id="file-import-save" class="file-input" accept=".json" />
+              </div>
+            </div>
+
+            <div class="setting-row" style="flex-direction: column; align-items: stretch;">
+              <button id="btn-reset-game" class="btn" style="background: rgba(245, 101, 101, 0.1); border-color: rgba(245, 101, 101, 0.2); color: #f56565; padding: 10px; font-size: 0.9rem;">
+                🚨 Reset Game Progress
+              </button>
+            </div>
+
+            <!-- About Developer Section (New) -->
+            <div id="settings-about-me" style="margin-top: 20px; text-align: center; border-top: 1px solid rgba(255,255,255,0.08); padding-top: 20px; display: flex; flex-direction: column; align-items: center; gap: 8px; width: 100%;">
+              <img src="about-me.jpg" alt="Wael Sayed" style="width: 75px; height: 75px; border-radius: 50%; border: 2.5px solid rgba(56, 178, 172, 0.5); object-fit: cover; box-shadow: 0 4px 10px rgba(0,0,0,0.3);">
+              <h3 id="about-me-title" style="font-size: 1.1rem; font-weight: 700; color: hsl(var(--text-color));">Designed by Wael Sayed</h3>
+              <p id="about-me-text" style="color: hsl(var(--text-muted)); font-size: 0.8rem; line-height: 1.4; max-width: 320px;">
+                Hello! I'm Wael, a passionate developer. I built Mindscape to provide an atmospheric, interactive simulation that builds empathy, raises awareness, and models the real-world daily challenges of living with mental health conditions.
+              </p>
+              <div style="display: flex; gap: 12px; justify-content: center; margin-top: 5px; flex-wrap: wrap;">
+                <a href="#" class="social-link" style="color: #38b2ac; font-size: 0.75rem; text-decoration: none; font-weight: bold;">💼 LinkedIn</a>
+                <a href="#" class="social-link" style="color: #38b2ac; font-size: 0.75rem; text-decoration: none; font-weight: bold;">💻 GitHub</a>
+                <a href="#" class="social-link" style="color: #38b2ac; font-size: 0.75rem; text-decoration: none; font-weight: bold;">🐦 Twitter</a>
+              </div>
+            </div>
+
+          </div>
+        </div>
+      </div>
+
+      <!-- 2. Interactive Guide/Tutorial Dialog -->
+      <div id="tutorial-modal" class="modal-overlay">
+        <div class="modal-content glass" style="max-width: 400px; max-height: 85%;">
+          <header class="modal-header">
+            <h2 id="tutorial-title" class="modal-title">Mindscape Manual</h2>
+            <button id="btn-close-tutorial" class="modal-close" aria-label="Close Tutorial">&times;</button>
+          </header>
+
+          <div id="tutorial-content" style="font-size: 0.9rem; line-height: 1.6; display: flex; flex-direction: column; gap: 16px; overflow-y: auto; padding-right: 4px;">
+            <!-- Tutorial text loaded dynamically based on language -->
+          </div>
+        </div>
+      </div>
+
+      <!-- 3. Mindscape Shop Dialog (New) -->
+      <div id="shop-modal" class="modal-overlay">
+        <div class="modal-content glass" style="max-width: 400px; max-height: 85%;">
+          <header class="modal-header">
+            <h2 id="shop-title" class="modal-title">Mindscape Shop</h2>
+            <button id="btn-close-shop" class="modal-close" aria-label="Close Shop">&times;</button>
+          </header>
+
+          <div id="shop-balance-row" style="display:flex; justify-content:space-between; align-items:center; border-bottom:1px solid rgba(255,255,255,0.08); padding-bottom:12px;">
+            <span id="shop-balance-label" style="font-size:0.9rem; color:hsl(var(--text-muted));">Mind Tokens:</span>
+            <div class="currency-container" style="background:rgba(255, 215, 0, 0.15); border-color: rgba(255, 215, 0, 0.25);">
+              <span>
+                <svg viewBox="0 0 24 24" style="width:16px; height:16px; fill:#ffd700; display:inline-block; vertical-align:middle;"><circle cx="12" cy="12" r="10" stroke="#b7791f" stroke-width="1.5" /><circle cx="12" cy="12" r="6" stroke="#b7791f" stroke-width="1" fill="none" /><path d="M12 9v6M10.5 10.5h3M10.5 13.5h3" stroke="#b7791f" stroke-width="1" stroke-linecap="round" /></svg>
+              </span>
+              <span id="shop-tokens-val" class="currency-value">50</span>
+            </div>
+          </div>
+
+          <div id="shop-items-list" style="display:flex; flex-direction:column; gap:14px; overflow-y:auto; padding-right:4px; max-height: 380px;">
+            <!-- Spawns dynamically -->
+          </div>
+        </div>
+      </div>
+
+      <!-- 4. Special Event Dialog (New) -->
+      <div id="event-modal" class="modal-overlay" style="z-index: 110;">
+        <div class="modal-content glass" style="max-width: 380px; text-align:center; gap: 20px; border-color: rgba(255, 215, 0, 0.3);">
+          <h2 id="event-modal-title" style="font-family: var(--font-serif); font-size: 1.5rem; font-weight: 700; color: #ffd700;">Unexpected Turn</h2>
+          <p id="event-modal-text" style="font-size: 0.95rem; line-height: 1.5; color: hsl(var(--text-color));">
+            A special event occurred!
+          </p>
+          <div id="event-modal-stats" style="display:flex; flex-direction:column; gap:6px; align-items:center; margin: 10px 0;">
+            <!-- Stat changes indicators (e.g. +10 Energy, -15 Stress) -->
+          </div>
+          <button id="btn-close-event" class="btn btn-primary" style="width: 100%;">
+            Continue / استمرار
+          </button>
+        </div>
+      </div>
+
+      <!-- 5. Custom Sandbox Settings Modal -->
+      <div id="sandbox-modal" class="modal-overlay">
+        <div class="modal-content glass" style="max-width: 400px; max-height: 85%;">
+          <header class="modal-header">
+            <h2 id="txt-sandbox-title" class="modal-title">🎨 Custom Sandbox</h2>
+            <button id="btn-close-sandbox" class="modal-close" aria-label="Close Sandbox">&times;</button>
+          </header>
+          <div class="modal-body" style="display:flex; flex-direction:column; gap:12px; overflow-y:auto; max-height:420px; padding-right:4px;">
+            <p id="txt-sandbox-desc" style="font-size: 0.85rem; color: hsl(var(--text-muted)); line-height: 1.4;">
+              Select a mental disorder for each of the 6 days of your journey:
+            </p>
+            <div id="sandbox-days-selectors" style="display:flex; flex-direction:column; gap:10px; margin-top:10px;">
+              <!-- Dropdowns populated dynamically -->
+            </div>
+            <button id="btn-launch-sandbox" class="btn btn-primary" style="width: 100%; margin-top:15px; padding:12px;">
+              Launch Simulation
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- 6. Virtual Phone Modal -->
+      <div id="phone-modal" class="modal-overlay" style="z-index: 105;">
+        <div class="modal-content glass phone-frame" style="max-width: 420px; height: 85%; padding: 0; display: flex; flex-direction: column; overflow: hidden; border-radius: 36px; border: 4px solid rgba(255,255,255,0.15);">
+          <!-- Phone Header -->
+          <div class="phone-header-ui" style="background: rgba(255,255,255,0.03); padding: 16px 20px; display: flex; align-items: center; justify-content: space-between; border-bottom: 1px solid rgba(255,255,255,0.08); direction: ltr;">
+            <div style="display: flex; align-items: center; gap: 8px;">
+              <button id="btn-phone-back" class="btn hidden" style="padding: 6px 12px; font-size: 0.8rem; background: rgba(255,255,255,0.08); border: none; margin: 0; min-width: auto; height: auto;">← Back</button>
+              <h2 id="phone-app-title" class="modal-title" style="font-size: 1.2rem; margin: 0;">Virtual Phone</h2>
+            </div>
+            <button id="btn-close-phone" class="modal-close" style="font-size: 1.6rem; line-height: 1; padding: 0; background: none; border: none; color: hsl(var(--text-muted)); cursor: pointer;">&times;</button>
+          </div>
+          
+          <!-- Phone Body / Screens -->
+          <div class="phone-body" style="flex: 1; display: flex; flex-direction: column; overflow: hidden; position: relative;">
+            
+            <!-- Screen A: Chat List -->
+            <div id="phone-screen-list" style="flex: 1; overflow-y: auto; display: flex; flex-direction: column; padding: 12px 0;">
+              <!-- Populated dynamically: List of chats -->
+            </div>
+            
+            <!-- Screen B: Chat Conversation Thread -->
+            <div id="phone-screen-thread" class="hidden" style="flex: 1; display: flex; flex-direction: column; overflow: hidden;">
+              <!-- Scrollable message bubbles container -->
+              <div id="phone-messages-container" style="flex: 1; overflow-y: auto; padding: 16px; display: flex; flex-direction: column; gap: 12px; background: rgba(0,0,0,0.2);">
+                <!-- Bubbles go here -->
+              </div>
+              
+              <!-- Typing Indicator -->
+              <div id="phone-typing-indicator" class="hidden" style="padding: 8px 16px; font-size: 0.8rem; color: hsl(var(--text-muted)); font-style: italic; display: flex; align-items: center; gap: 6px; direction: ltr;">
+                <span class="typing-dot">.</span><span class="typing-dot">.</span><span class="typing-dot">.</span>
+                <span id="phone-typing-text">Typing...</span>
+              </div>
+              
+              <!-- Reply Options -->
+              <div id="phone-replies-container" style="background: rgba(255,255,255,0.03); padding: 12px 16px; display: flex; flex-direction: column; gap: 8px; border-top: 1px solid rgba(255,255,255,0.08);">
+                <!-- Buttons go here -->
+              </div>
+            </div>
+
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- Main JS Application Bundle Entry -->
+  </body>
+</html>
