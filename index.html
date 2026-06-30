@@ -1,4 +1,4 @@
-<!doctype html>
+﻿<!doctype html>
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
@@ -13,8 +13,8 @@
     <link rel="manifest" href="/manifest.json" />
 
     <title>Mindscape: Mental Health Simulator</title>
-    <script type="module" crossorigin src="/assets/index-Df9RXPT9.js"></script>
-    <link rel="stylesheet" crossorigin href="/assets/index-BW43r3Z2.css">
+    <script type="module" crossorigin src="/assets/index-DNUQlLhx.js"></script>
+    <link rel="stylesheet" crossorigin href="/assets/index-B4h9Ze79.css">
   </head>
   <body>
     
@@ -355,6 +355,14 @@
                 <input type="checkbox" id="switch-sound" checked />
                 <span class="slider"></span>
               </label>
+            </div>
+            
+            <div class="setting-row" style="flex-direction: column; align-items: stretch; gap: 8px;">
+              <div style="display: flex; justify-content: space-between; align-items: center; width: 100%;">
+                <span id="settings-opacity-label">UI Opacity / وضوح الواجهة</span>
+                <span id="val-settings-opacity" style="font-size: 0.85rem; font-weight: bold; color: hsl(var(--accent));">95%</span>
+              </div>
+              <input type="range" id="slider-ui-opacity" min="40" max="100" value="95" style="width: 100%; cursor: pointer;" />
             </div>
             
             <div class="setting-row" style="flex-direction: column; align-items: stretch; gap: 8px;">
